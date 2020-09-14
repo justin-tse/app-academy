@@ -2,7 +2,9 @@
 # with its letters in reverse order.
 
 def reverse(word)
-
+  reverse_word = ""
+  word.each_char { |char| reverse_word = char + reverse_word }
+  reverse_word
 end
 
 puts reverse("cat")          # => "tac"
