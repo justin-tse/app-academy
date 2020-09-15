@@ -7,6 +7,12 @@ def filter_lengths(strings, length=5)
   strings.select { |string| string.length >= length }
 end
 
+# Optimized code
+# can short the name in the |string| to |str|
+def def filter_lengths(strings, length=5)
+  strings.select { |str| str.length >= length }
+end
+
 p filter_lengths(["pear", "dragonfruit", "fig", "clementine"], 4)   # => ["pear", "dragonfruit", "clementine"]
 p filter_lengths(["pear", "dragonfruit", "fig", "clementine"])      # => ["dragonfruit", "clementine"]
 p filter_lengths(["cat", "dog", "capybara", "mouse"], 7)            # => ["capybara"]

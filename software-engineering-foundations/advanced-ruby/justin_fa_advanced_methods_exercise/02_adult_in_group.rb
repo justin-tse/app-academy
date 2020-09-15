@@ -17,6 +17,11 @@ end
 #   return people.select { |hash| hash[:age] >= 18 } != []
 # end
 
+# Optimized code
+def adult_in_group?(people)
+  people.any? { |person| person[:age] >= 18 }
+end
+
 people_1 = [
     {name: "Jack", age: 17},
     {name: "Jill", age: 21},
