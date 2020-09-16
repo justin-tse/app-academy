@@ -12,6 +12,15 @@
 # end
 
 # Optimized code
+# 1
+def is_sorted(arr)
+  (0...arr.length - 1).each do |i|
+    return false if arr[i] > arr[i + 1]
+  end
+  true
+end
+
+# 2
 def is_sorted(arr)
   (0...arr.length - 1).all? { |i| arr[i] <= arr[i + 1] }
 end
