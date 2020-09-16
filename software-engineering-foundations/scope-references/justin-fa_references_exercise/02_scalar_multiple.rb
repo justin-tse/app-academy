@@ -6,22 +6,26 @@
 # to the object_id of the returned array. The exact object_ids you get back don't matter. We just want the ids
 # to be the same before and after calling your method.
 
-def scalar_multiple!(array, multiplier)
-  i = 0
-  while i < array.length
-    array[i] *= multiplier
+# def scalar_multiple!(array, multiplier)
+#   i = 0
+#   while i < array.length
+#     array[i] *= multiplier
 
-    i += 1
-  end
+#     i += 1
+#   end
 
-  array
-end
+#   array
+# end
 
 def scalar_multiple!(array, multiplier)
   array.map! { |i| i * multiplier }
   array
 end
 
+# Optimized code
+def scalar_multiple!(array, multiplier)
+  array.map! { |ele| ele * multiplier }
+end
 
 array_1 = [7, 0, 4]
 p array_1.object_id                             # => 70326264380840
