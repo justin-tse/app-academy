@@ -2,13 +2,18 @@
 # The method should return true if the elements are in increasing order, false otherwise.
 # Do not use the built-in Array#sort in your solution :)
 
+# def is_sorted(arr)
+#   (0..arr.length-2).each do |i|
+#     if arr[-1- i] < arr[-2 - i] && -2 - i > -arr.length
+#       return false
+#     end
+#   end
+#   true
+# end
+
+# Optimized code
 def is_sorted(arr)
-  (0..arr.length-2).each do |i|
-    if arr[-1- i] < arr[-2 - i] && -2 - i > -arr.length
-      return false
-    end
-  end
-  true
+  (0...arr.length - 1).all? { |i| arr[i] <= arr[i + 1] }
 end
 
 p is_sorted([1, 4, 10, 13, 15])       # => true
