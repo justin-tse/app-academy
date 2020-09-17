@@ -54,6 +54,33 @@ def censor(string, array)
     new_words.join(" ")
 end
 
+ # Optimized the method censor's code => the method is too long and use more than two loops, 
+ # you can use a helper method to optimize it.
+def censor(string, array)
+  new_words = (string.split).map do |word|
+    if array.include?(word.downcase)
+      star_vowels(word)
+    else
+      word
+    end
+  end
+
+  new_words.join(" ")
+end
+
+def star_vowels(word)
+  vowels = "aeiouAEIOU"
+  new_word = ""
+  word.each_char do |char|
+    if vowels.include?(char)
+      new_word += "*"
+    else
+      new_word += char
+    end
+  end
+  
+  new_word
+end
 
 def power_of_two?(num)
 
