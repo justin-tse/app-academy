@@ -49,3 +49,8 @@ def palindrome_substrings(string)
   array = substrings(string)
   array.select { |str| palindrome?(str) && str.length > 1}
 end
+
+# Optimized code
+def palindrome_substrings(string)
+  substrings(string).select { |substr| palindrome?(substr) && substr.length > 1 }
+end
