@@ -12,6 +12,21 @@ def partition(array, num)
   [first_subarray, second_subarray]
 end
 
+# Optimized the method partition's code => variable name should be more meaningful!
+def partition(array, num)
+  less = []
+  more = []
+  array.each do |n|
+    if n >= num
+      more << n
+    else
+      less << n
+    end
+  end
+  
+  [less, more]
+end
+
 
 def merge(hash_1, hash_2)
   new_hash = {}
@@ -38,6 +53,7 @@ def censor(string, array)
 
     new_words.join(" ")
 end
+
 
 def power_of_two?(num)
 
