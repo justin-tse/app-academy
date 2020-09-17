@@ -4,6 +4,16 @@ def palindrome?(string)
   string == reverse_string
 end
 
+# Optimized code
+def palindrome?(string)
+  string.each_char.with_index do |char, i|
+    if string[i] != string[-i-1]
+      return false
+    end
+  end
+  true
+end
+
 
 def substrings(string)
   array = []
@@ -22,6 +32,9 @@ def substrings(string)
 
   array
 end
+
+# Optimized code
+
 
 def palindrome_substrings(string)
   array = substrings(string)
