@@ -94,3 +94,13 @@ def power_of_two?(num)
   end
   
 end
+
+# Optimized the method power_of_two?'s code => product is better than divide
+def power_of_two?(num)
+  product = 1
+  while product < num
+    product *= 2
+  end
+
+  num == product
+end
