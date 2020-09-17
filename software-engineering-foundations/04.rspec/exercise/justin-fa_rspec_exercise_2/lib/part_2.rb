@@ -34,7 +34,16 @@ def substrings(string)
 end
 
 # Optimized code
+def substrings(string)
+  array = []
+  (0...string.length).each do |start_index|
+    (start_index...string.length).each do |end_index|
+      array << string[start_index..end_index]
+    end
+  end
 
+  array
+end
 
 def palindrome_substrings(string)
   array = substrings(string)
