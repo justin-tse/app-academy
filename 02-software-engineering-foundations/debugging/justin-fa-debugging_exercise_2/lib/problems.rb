@@ -65,6 +65,14 @@ def dupe_indices(array)
   new_count
 end
 
+# Optimized dupe_indices's code to shorter
+def dupe_indices(array)
+  count = Hash.new { |h, k| h[k] = []}
+  array.each.with_index { |char, index| count[char] << index }
+  count.select { |char, arr| arr.length > 1 }
+end
+
+
 def ana_array(arr_1, arr_2)
   count(arr_1) == count(arr_2)
 end
