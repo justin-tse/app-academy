@@ -18,6 +18,23 @@ def prime?(num)
   true
 end
 
+# Optimized largest_prime_factor's code to use .downto method
+def prime?(num)
+  if num < 2
+    return false
+  end
+  (2...num).each do |factor|
+    if num % factor == 0
+      return false
+    end
+  end
+  true
+end
+
+def largest_prime_factor(num)
+  num.downto(2) { |i| return i if prime?(i) && num % i == 0 }
+end
+
 def unique_chars?(string)
   count = Hash.new(0)
   string.each_char { |c| count[c] += 1 }
