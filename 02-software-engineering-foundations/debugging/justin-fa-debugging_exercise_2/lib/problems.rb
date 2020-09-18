@@ -41,6 +41,18 @@ def unique_chars?(string)
   count.values.none? { |num| num > 1}
 end
 
+# Optimized unique_chars?'s code to use array
+def unique_chars?(string)
+  array = []
+
+  string.each_char do |char|
+    return false if array.include?(char)
+    array << char
+  end
+
+  true
+end
+
 def dupe_indices(array)
   count = Hash.new([])
   array.each.with_index { |char, index| count[char] += [index] }
