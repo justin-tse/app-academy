@@ -40,6 +40,12 @@ class Car
 end
 
 car_1 = Car.new("red")
+car_1 = Car.new("red")
+car_1 = Car.new("red")
+car_1 = Car.new("red")
+p car_1.color
+p car_1.color
+p car_1.color
 p car_1.color
 
 car_2 = Car.new("black")
@@ -70,5 +76,21 @@ p car_1.num_wheels
 car_2 = Car.new("blue")
 p car_2.num_wheels
 
+class Car
+  @@NUM_WHEELS = 4
 
-olll
+  def self.upgrade_to_flying_cars
+    @@NUM_WHEELS = 0
+  end
+
+  def initialize(color)
+    @color = color
+  end
+  
+  def num_wheels=(n)
+    @@NUM_WHEELS = n
+  end
+end
+
+car_1 = Car.new("red")
+car_2 = Car.new("blue")
