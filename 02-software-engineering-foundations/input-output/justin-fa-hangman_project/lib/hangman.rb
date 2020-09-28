@@ -1,7 +1,8 @@
 class Hangman
   DICTIONARY = ["cat", "dog", "bootcamp", "pizza"]
+  
   def self.random_word
-    @randowm_word = DICTIONARY.sample
+    DICTIONARY.sample
   end
 
   def initialize
@@ -35,29 +36,34 @@ class Hangman
 
   def fill_indices(char, array)
     array.each { |index| @guess_word[index] = char }
-    @guess_word
   end
 
   def try_guess(char)
-    @remaining_incorrect_guesses -= 1 if !@secret_word.include?(char)
-    if already_attempted?(char)
+    if self.already_attempted?(char)
       print 'that has already been attempted'
       return false
-    else
-      @attempted_chars << char
-      fill_indices(char, get_matching_indices(char))
-      return true
     end
+
+    @attempted_chars << char
+
+    matching = self.get_matching_indices(char)
+    if matching.empty?
+      @remaining_incorrect_guesses -= 1
+    else
+      self.fill_indices(char, matching)
+    end
+
+    true
   end
 
   def ask_user_for_guess
     print "Enter a char: "
-    try_guess(gets.chomp)
+    self.try_guess(gets.chomp)
   end
 
   def win?
     if @guess_word == @secret_word.split("")
-      print "WIN"
+      p "WIN"
       true
     else
       false
@@ -66,7 +72,7 @@ class Hangman
 
   def lose?
     if @remaining_incorrect_guesses == 0
-      print "LOSE"
+      p "LOSE"
       true
     else
       false
@@ -74,13 +80,11 @@ class Hangman
   end
 
   def game_over?
-    print @secret_word
-    return win? || lose?
-    # if win? || lose? == false
-    #   true
-    # else
-    #   false
-    # end    
+    if win? || lose?
+      p "The word is: #{@secret_word}"
+      true
+    else
+      false
+    end
   end
-  
 end
