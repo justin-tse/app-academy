@@ -15,7 +15,7 @@ class Startup
   end
 
   def >(other_startup)
-    @funding > other_startup.funding
+    self.funding > other_startup.funding
   end
 
   def hire(employee_name, title)
@@ -28,15 +28,6 @@ class Startup
 
   def size
     @employees.length
-  end
-
-  def pay_employee(employee)
-    money_cost = @salaries[employee.title]
-    if  @funding >= money_cost
-      @funding -= employee.pay(money_cost)
-    else
-      raise "The funding is not enough"
-    end    
   end
 
   def pay_employee(employee)
@@ -56,7 +47,7 @@ class Startup
   def average_salary
     sum = 0
     @employees.each { |employee| sum += @salaries[employee.title]}
-    sum / size.to_f
+    sum / self.size.to_f
   end
 
   def close
@@ -66,9 +57,11 @@ class Startup
 
   def acquire(other_startup)
     @funding += other_startup.funding
+
     other_startup.salaries.each do |title, salary| 
       @salaries[title] = salary if !@salaries.has_key?(title)
     end
+    
     @employees += other_startup.employees
     other_startup.close    
   end
