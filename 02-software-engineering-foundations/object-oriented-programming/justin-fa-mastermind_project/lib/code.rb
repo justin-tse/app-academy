@@ -12,18 +12,21 @@ class Code
     array.all? { |char| POSSIBLE_PEGS.has_key?(char.upcase)}
   end
 
+  # def self.random(length)
+  #   random_array = []
+  #   length.times do
+  #     random_array << POSSIBLE_PEGS.keys.sample
+  #   end
+  #     Code.new(random_array)
+  # end
+
   def self.random(length)
-    random_array = []
-    length.times do
-      random_array << POSSIBLE_PEGS.keys.sample
-    end
-      Code.new(random_array)
+    pegs = Array.new(length) { Code::POSSIBLE_PEGS.keys.sample }
+    Code.new(pegs)
   end
 
   def self.from_string(string)
-    array = []
-    string.each_char { |char| array << char }
-    Code.new(array)
+    Code.new(string.split(""))
   end
 
   def initialize(chars)
@@ -47,11 +50,7 @@ class Code
   end
 
   def num_exact_matches(guess)
-    num_exact = 0
-    (0...guess.length).each do |i|
-      num_exact += 1 if guess[i] == self[i]
-    end
-    num_exact
+    (0...guess.length).count { |i| guess[i] == @pegs[i] }
   end
 
   def num_near_matches(guess)
@@ -64,7 +63,6 @@ class Code
   end
 
   def ==(other_code)
-    return false if other_code.length != self.length
-    num_exact_matches(other_code) == self.length
+    other_code.length == self.length && num_exact_matches(other_code) == self.length
   end
 end
