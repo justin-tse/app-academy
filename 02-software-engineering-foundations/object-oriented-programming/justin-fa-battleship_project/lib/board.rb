@@ -40,13 +40,50 @@ class Board
       false
     end
   end
-
+  
   def place_random_ships
     num = @grid.length
+
     @grid.each_with_index do |row, i|
-      row.sample(num / 4).map! { |index| row[i] = :S if i == index}
+      index = Array(1..@size).sample(@size / 4)
+      row.each_with_index { |ele, j| @grid[i][j] = :S if index.include?(j * i) }  
     end
-    @grid
+     @grid
   end
-  
+
+  def place_random_ships
+    total_ships = @size * 0.25
+
+    while num_ships < total_ships
+      rand_row = rand(0...@grid.length)
+      rand_column = rand(0...@grid.length)
+      position = rand_row, rand_column
+      self.[]=(position, :S)
+    end
+
+  end
+
+  def hidden_ships_grid
+    hidden_ships_grid =  Array.new(@grid.length) { Array.new(@grid.length) }
+    @grid.each_with_index do |sub_arr, i|
+      sub_arr.each_with_index do |ele, j|
+        ele = :N if ele == :S 
+        hidden_ships_grid[i][j] = ele
+      end
+    end
+
+    hidden_ships_grid
+  end
+
+  def self.print_grid(grid)
+    grid.each { |row| puts row.join(" ") }
+  end
+
+  def cheat
+    Board.print_grid(@grid)
+  end
+
+  def print_grid
+    Board.print_grid(self.hidden_ships_grid)
+  end
 end
