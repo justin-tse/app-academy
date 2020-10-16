@@ -7,18 +7,19 @@ attr_reader :board, :player
   def initialize(n)
     @player = Player.new
     @board = Board.new(n)
-    @remaining_misses =  @board.size * 0.5
+    @remaining_misses =  @board.size / 2
+  # .round() .ceil() .floor()
   end
 
   def start_game
     @board.place_random_ships
-    print @board.num_ships
+    puts "The total number of hidden ships is: #{@board.num_ships}"
     @board.print
   end
 
   def lose?
     if @remaining_misses <= 0
-      print "you lose"
+      puts "you lose"
       true
     else
       false
@@ -27,25 +28,22 @@ attr_reader :board, :player
  
   def win?
     if @board.num_ships == 0
-      print "you win"
+      puts "you win"
       true
     else
       false
     end
   end
 
+  # Optimize the code: itself is a boole
   def game_over?
-    if self.win? || self.lose?
-      true
-    else
-      false
-    end
+    self.win? || self.lose?
   end
 
   def turn
     position = @player.get_move
-    @board.print
     @remaining_misses -= 1 if !@board.attack(position)
-    print @remaining_misses
+    @board.print
+    puts "remaing misses: #{@remaining_misses}"      
   end
 end
