@@ -40,21 +40,11 @@ class Board
       false
     end
   end
-  
-  def place_random_ships
-    num = @grid.length
-
-    @grid.each_with_index do |row, i|
-      index = Array(1..@size).sample(@size / 4)
-      row.each_with_index { |ele, j| @grid[i][j] = :S if index.include?(j * i) }  
-    end
-     @grid
-  end
 
   def place_random_ships
     total_ships = @size * 0.25
 
-    while num_ships < total_ships
+    while self.num_ships < total_ships
       rand_row = rand(0...@grid.length)
       rand_column = rand(0...@grid.length)
       position = rand_row, rand_column
@@ -83,7 +73,7 @@ class Board
     Board.print_grid(@grid)
   end
 
-  def print_grid
+  def print
     Board.print_grid(self.hidden_ships_grid)
   end
 end
