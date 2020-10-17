@@ -60,6 +60,13 @@ def sum_array(array)
   last_ele + sum_array(array)
 end
 
+# Optimized the code 
+def sum_array(array)
+  return 0 if array == []
+  return array[0] if array.length == 1
+  array[0] + sum_array(array[1..-1])
+end
+
 p sum_array([1, 3, 5, 7])
 # Write a method, reverse_string(str), that takes in a string.
 # The method should return the string with it's characters in reverse order.
@@ -76,6 +83,17 @@ def reverse_string(str)
   return str if str.length <= 1
   last_char = str.slice!(-1)                                                                                                                                   
   last_char + reverse_string(str)
+end
+
+# Optimized the code 
+def reverse_string(str)
+  return str if str.length <= 1
+  str[-1] + reverse_string(str[0...-1])
+end
+
+def reverse_string(str)
+  return str if str.length <= 1
+  reverse_string(str[1..-1]) + str[0]
 end
 
 # A 1-dimensional array is also known as a flattened array.
