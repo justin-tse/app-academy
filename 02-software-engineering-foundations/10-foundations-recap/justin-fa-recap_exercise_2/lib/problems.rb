@@ -1,8 +1,7 @@
 # Write a method, least_common_multiple, that takes in two numbers and returns the smallest number that is a mutiple
 # of both of the given numbers
 def least_common_multiple(num_1, num_2)
-    mutiple_num = num_1 * num_2
-    (2..mutiple_num).each { |mutiple| return mutiple_num / mutiple if num_1 % mutiple == 0  && num_2 % mutiple == 0}
+    (2..num_1 * num_2).each { |i| return i if i % num_1 == 0  && i % num_2 == 0}
 end
 
 
@@ -15,7 +14,8 @@ def most_frequent_bigram(str)
         count[str[i..i+1]] += 1
     end
 
-    count.each { |k, v| return k if v == count.values.max}
+    sorted = count.sort_by { |k, v| v }
+    sorted[-1][0]
 end
 
 
@@ -58,9 +58,11 @@ class Array
     # This should remind you of the spaceship operator! Convenient :)
     def bubble_sort(&prc)
         prc ||= Proc.new { |a, b|  a <=> b }
+
         sorted = false
         while !sorted
             sorted = true
+            
             (0...self.length - 1).each do |i|
                 if  prc.call(self[i], self[i + 1]) == 1
                     self[i], self[i + 1] = self[i + 1], self[i]
