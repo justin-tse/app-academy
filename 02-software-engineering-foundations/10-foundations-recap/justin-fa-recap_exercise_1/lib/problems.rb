@@ -7,20 +7,17 @@
 # all_vowel_pairs(["goat", "action", "tear", "impromptu", "tired", "europe"])   # => ["action europe", "tear impromptu"]
 
 def all_vowel_pairs(words)
+    vowels = "aeiou".split("")
     pairs = []
-    words.each.with_index do |word_1, i|
-        words.each.with_index do |word_2, j|
-            if i < j
+
+    (0...words.length).each.with_index do |i|
+        ((i + 1)...words.length).each.with_index do |j|   
                 pair = words[i] + " " + words[j]
-                pairs << pair
-            end
+                pairs << pair if vowels.all? { |vowel| pair.include?(vowel) }
         end 
     end
 
-    vowels = "aeiou".split("")
-    pairs.select do |pair|
-        vowels.all? { |vowel| pair.include?(vowel) }
-    end
+    pairs
 end
 
 
@@ -80,17 +77,18 @@ class String
     # "cats".substrings(2)  # => ["ca", "at", "ts"]
     def substrings(length = nil)
         array = []
-        self.each_char.with_index do |char, i|
-            array << char
-            ((i + 1)...self.length).each do |j|
-                char = char + self[j]
-                array << char
+        
+        (0...self.length).each do |i|
+            (i...self.length).each do |j|
+                str = self[i..j]
+                array << str
             end
         end
-        if length != nil
-            array.select { |s| s.length == length }
-        else
+
+        if length.nil?
             array
+        else
+            array.select { |s| s.length == length }
         end
     end
 
@@ -107,10 +105,12 @@ class String
     def caesar_cipher(num)
         alphabet = ("a".."z").to_a
         new_str = ""
-        self.each_char do |char|
-            new_str = new_str + alphabet[(alphabet.index(char) + num) % 26]
-        end
 
+        self.each_char do |char|
+            new_index = (alphabet.index(char) + num) % 26
+            new_str += alphabet[new_index]
+        end
+        
         new_str
     end
 end
