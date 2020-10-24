@@ -14,6 +14,16 @@ def no_dupes?(arr)
 
   array
 end
+
+# Optimized the code
+def no_dupes?(arr)
+  count = Hash.new(0)
+  array = []
+  arr.each { |ele| count[ele] += 1 }
+  array = count.keys.select { |k| count[k] == 1}
+  array
+end
+
   # Examples
 p no_dupes?([1, 1, 2, 1, 3, 2, 4])         # => [3, 4]
 p no_dupes?(['x', 'x', 'y', 'z', 'z'])     # => ['y']
@@ -33,6 +43,16 @@ def no_consecutive_repeats?(arr)
     else
       el    
     end  
+  end
+  true
+end
+
+# Optimized the code
+def no_consecutive_repeats?(arr)
+  (0...arr.length - 1).each do |idx|
+    if arr[idx] == arr[idx + 1]
+      return false
+    end
   end
   true
 end
@@ -76,6 +96,22 @@ def longest_streak(str)
   end
   sorted = count.sort_by { |k, v| v[0] }
   sorted[-1][-1][-1]
+end
+
+def longest_streak(str)
+  current = ""
+  longest = ""
+
+  (0...str.length).each do |idx|
+    if str[idx] == str[idx - 1] || idx == 0
+      current += str[idx]
+    else
+      current = str[idx]
+    end
+    longest = current if current.length >= longest.length
+  end
+
+  longest
 end
 # Examples
 p longest_streak('a')           # => 'a'

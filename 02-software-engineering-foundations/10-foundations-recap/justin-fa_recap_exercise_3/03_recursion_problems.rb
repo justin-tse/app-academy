@@ -16,6 +16,16 @@ def multiply(a, b)
   end 
 end
 
+# Optimized the code
+def multiply(a, b)
+  return 0 if a == 0
+  if a < 0
+    -(b + multiply((-a) - 1, b))
+  else
+    multiply(a - 1, b) + b
+  end
+end
+
 # Examples
 p multiply(3, 5)        # => 15
 p multiply(5, 3)        # => 15
@@ -36,6 +46,7 @@ p multiply(-3, 6)       # => -18
 # Write a method lucasSequence that accepts a number representing a length as an 
 # arg. The method should return an array containing the Lucas Sequence up to the 
 # given length. Solve this recursively.
+
 def lucas_sequence(num)
   return [] if num == 0
   array = []
@@ -48,6 +59,17 @@ def lucas_number(n)
   return 2 if n == 1
   return 1 if n == 2
   lucas_number(n - 1) + lucas_number(n - 2)
+end
+
+# Optimized the code
+def lucas_sequence(num)
+  return [] if num == 0
+  return [2] if num == 1
+  return [2, 1] if num == 2
+  
+  seq = lucas_sequence(num - 1)
+  next_ele = seq[-1] + seq[-2]
+  seq << next_ele
 end
 
 # Examples

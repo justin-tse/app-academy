@@ -19,6 +19,19 @@ class String
 
   selected
   end
+
+
+  # Optimized the code
+  def select(&prc)
+    return "" if prc.nil?
+    new_str = ""
+
+    self.each_char do |char|
+      new_str += char if prc.call(char)
+    end
+
+    new_str
+  end
 end
 # Examples
 p "app academy".select { |ch| !"aeiou".include?(ch) }   # => "pp cdmy"
