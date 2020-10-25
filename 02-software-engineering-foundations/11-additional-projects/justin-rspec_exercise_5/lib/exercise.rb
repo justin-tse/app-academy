@@ -15,6 +15,10 @@ def prizz_proc(array, prc_1, prc_2)
   array.select { |el| [prc_1.call(el), prc_2.call(el)].one? }
 end
 
+def prizz_proc(array, prc_1, prc_2)
+  array.select { |el| (prc_1.call(el) || prc_2.call(el)) && !(prc_1.call(el) && prc_2.call(el)) }
+end
+
 def zany_zip(*arrays)
   arrs = *arrays
   length = []
