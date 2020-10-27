@@ -91,6 +91,21 @@ def max_tie_breaker(array, prc_1, &prc_2)
   str = hash.keys.select {|k| hash[k] == hash.values.max }[0]
 end
 
+# Optimized the code
+def max_tie_breaker(array, prc_1, &prc_2)
+  return nil if array.empty?
+  max = array.first
+  array.each do |el|
+    result_el = prc_2.call(el)
+    result_max = prc_2.call(max)
+    if result_el > result_max
+      max = el
+    elsif result_el == result_max && prc_1.call(el) > prc_1.call(max)
+      max = el
+    end
+  end
+  max
+end
 
 def silly_syllables(sent)
   vowels = "aeiou"
@@ -110,3 +125,4 @@ def silly_syllables(sent)
   end).join(" ")
 
 end
+
