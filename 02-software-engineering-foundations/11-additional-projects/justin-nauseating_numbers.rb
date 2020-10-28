@@ -1,3 +1,4 @@
+require "byebug"
 # https://open.appacademy.io/learn/full-stack-online/software-engineering-foundations/nauseating-numbers
 # Nauseating Numbers
 
@@ -26,6 +27,7 @@ def pair_product(array, product)
             return true if array[i] * array[j] == product
         end
     end
+
     false
 end
 
@@ -60,7 +62,10 @@ def perfect_square(num)
     false
 end
 
-
+# Optimized the code
+def perfect_square(num)
+    (1..num).any? { |i| i * i == num }
+end
 
 # p perfect_square(1)     # true
 # p perfect_square(4)     # true
@@ -71,7 +76,6 @@ end
 # p perfect_square(40)    # false
 # p perfect_square(32)    # false
 # p perfect_square(50)    # false
-
 
 # Phase 2: Nothing you can't handle.
 
@@ -84,6 +88,16 @@ def anti_prime?(num)
         sum_i_array << sum_i
     end
     sum_i_array[-1] == sum_i_array.max
+end
+
+# Optimized the code
+def num_factors(num)
+    (1..num).count { |i| num % i == 0 }
+end
+
+def anti_prime(num)
+    amount = num_factors(num)
+    (1..num).all? { |i| amount > num_factors(i) }
 end
 
 # p anti_prime?(24)   # true
@@ -134,6 +148,19 @@ def mutual_factors(*nums)
     mutual_factors
 end
 
+def factors(num)
+    (1..num).select { |i| num % i == 0 }
+end
+
+def mutual_factors(*nums)
+    common_factors = common_factors = factors(nums[0])
+    nums.each do |num|
+        common_factors &= factors(num)
+    end
+    common_factors
+end
+
+
 # p mutual_factors(50, 30)            # [1, 2, 5, 10]
 # p mutual_factors(50, 30, 45, 105)   # [1, 5]
 # p mutual_factors(8, 4)              # [1, 2, 4]
@@ -152,6 +179,15 @@ def tribonacci_number(n)
     tribonacci_number(n - 3) + tribonacci_number(n - 2) + tribonacci_number(n - 1)
 end
 
+# Second method
+def tribonacci_number_number(n)
+    seq = [1, 1, 2]
+    while seq.length < n
+       seq << seq[-3] + seq[-2] + seq[-1] 
+    end
+    seq[-1]
+end
+
 # p tribonacci_number(1)  # 1
 # p tribonacci_number(2)  # 1
 # p tribonacci_number(3)  # 2
@@ -163,6 +199,11 @@ end
 
 
 # Phase 3: Now we're having fun.
+
+def matrix_addition_reloaded(*matrices)
+
+end
+
 
 # def matrix_addition_reloaded(*matrices)
 #     heigth = matrices.first.length
@@ -189,11 +230,33 @@ end
 #     end
 # # end
 
-# matrix_a = [[2,5], [4,7]]
-# matrix_b = [[9,1], [3,0]]
-# matrix_c = [[-1,0], [0,-1]]
-# matrix_d = [[2, -5], [7, 10], [0, 1]]
-# matrix_e = [[0 , 0], [12, 4], [6,  3]]
+def matrix_addition_reloaded(*matrices)
+    matrix = matrices.first
+    height = matrix.length
+    width = matrix[0].length
+
+    empty_matrix = Array.new(height) { [0] * width }
+    matrices.inject(empty_matrix) do |m1, m2|
+        return nil if m2.length != height or m2[0].length != width
+        matrix_addition(m1, m2)
+    end
+end
+
+def matrix_addition_reloaded(*matrices)
+    height = matrices.first.length
+    width = matrices.first.first.length
+
+    matrices.inject do |m, n|
+        return nil if n.length != height || n.first.length != width
+        matrix_addition(m, n)
+    end
+end
+
+matrix_a = [[2,5], [4,7]]
+matrix_b = [[9,1], [3,0]]
+matrix_c = [[-1,0], [0,-1]]
+matrix_d = [[2, -5], [7, 10], [0, 1]]
+matrix_e = [[0 , 0], [12, 4], [6,  3]]
 
 # p matrix_addition_reloaded(matrix_a, matrix_b)              # [[11, 6], [7, 7]]
 # p matrix_addition_reloaded(matrix_a, matrix_b, matrix_c)    # [[10, 6], [7, 6]]
@@ -249,35 +312,75 @@ end
 #     [4, 2, 9, 7],
 # ]) # false
 
-def pascals_triangle(num)
-    return [[1]] if num == 1
-    array = Array.new(num) { Array.new }
-    (1...num).each do |col|
-        (0...col).each do |i|
-            if col == 1 
-                array[0][0] = 1
-            elsif col == 2
-                array[1] = [1,]
-            elsif i == 0
-                array[col][0] = array[col - 1][0] 
-            elsif i == col - 1
-                array[col][-1] = array[col - 1][-1] 
-            # else
-            #     array[col] << array[col - 1][i - 1] + array[col - 1][i]
-            end
-        end
-    end
-
-    array   
+def squarocol?(grid)
+    return true if grid.any? { |row| row.uniq.length == 1 }
+    return true if grid.transpose.any? { |col| col.uniq.length == 1 }
+    false
 end
+
+def squaragonal?(grid)
+    main_diagonal, anti_diagonal = [], []
+    (0...grid.length).each do |i|
+        main_diagonal << grid[i][i]
+        anti_diagonal << grid[i][-i - 1]
+    end
+    main_diagonal.uniq.length == 1 || anti_diagonal.uniq.length == 1
+end
+
+# p squaragonal?([
+#     [:x, :y, :o],
+#     [:x, :x, :x],
+#     [:o, :o, :x],
+# ]) # true
+
+# p squaragonal?([
+#     [:x, :y, :o],
+#     [:x, :o, :x],
+#     [:o, :o, :x],
+# ]) # true
+
+# p squaragonal?([
+#     [1, 2, 2, 7],
+#     [1, 1, 6, 7],
+#     [0, 5, 1, 7],
+#     [4, 2, 9, 1],
+# ]) # true
+
+# p squaragonal?([
+#     [1, 2, 2, 5],
+#     [1, 6, 5, 0],
+#     [0, 2, 2, 7],
+#     [5, 2, 9, 7],
+# ]) # false
+
+def pascals_triangle(num)
+    triangle = [[1]]
+    while triangle.length < num
+        level_above = triangle.last
+        next_level = [1]
+        next_level += adjacent_sums(level_above)
+        next_level << 1
+        triangle << next_level
+    end
+    triangle
+end
+
+def adjacent_sums(arr)
+    sums = []
+    (0...arr.length-1).each do |i|
+        sums << arr[i] + arr[i + 1]
+    end
+    sums
+end
+
 # p pascals_triangle(5)
-# [
-#     [1],
-#     [1, 1],
-#     [1, 2, 1],
-#     [1, 3, 3, 1],
-#     [1, 4, 6, 4, 1]
-# ]
+# # [
+# #     [1],
+# #     [1, 1],
+# #     [1, 2, 1],
+# #     [1, 3, 3, 1],
+# #     [1, 4, 6, 4, 1]
+# # ]
 
 # p pascals_triangle(7)
 # # [
@@ -319,6 +422,23 @@ def form?(num)
     false
 end
 
+# Optimized the code 
+def prime?(num)
+    return false if num < 2
+    (2...num).none? { |i| num % i == 0 }
+end
+
+def mersenne_prime(num)
+    count = 0
+    i = 1
+    while count < num
+        result = 2**i -1
+        count += 1 if prime?(result)
+        i += 1
+    end
+    result
+end 
+
 # p mersenne_prime(1) # 3
 # p mersenne_prime(2) # 7
 # p mersenne_prime(3) # 31
@@ -334,8 +454,19 @@ end
 
 def triangular_num?(num)
     num_2 = num * 2.0
-    (1..num_2).each { |i| return true if num_2 / i.to_f == i.to_f + 1 }
-    false
+    (1..num_2).any? { |i| num_2 / i.to_f == i.to_f + 1 }
+end
+
+# Optimized the code
+def triangular_word?(word)
+    alphabet = ("a".."z").to_a
+    num = 0
+    word.each_char { |char| num += alphabet.index(char) + 1 }
+    triangular_num(num).include?(num)
+end
+
+def triangular_num(num)
+    (1..num).map { |i| i * (i + 1) / 2 }
 end
 
 # p triangular_word?('abc')       # true
@@ -359,7 +490,7 @@ def consecutive_collapse(array)
     end
 end
 
-def consecutive(array)
+def collapse(array)
     new_array = []
     (0...array.length - 1).each do |i|
         if array[i] == array[i + 1] + 1 || array[i] == array[i + 1] - 1 
@@ -368,6 +499,21 @@ def consecutive(array)
         end
     end
     array
+end
+
+# Optimized the code
+def collapse(nums)
+    (0...nums.length-1).each do |i|
+        if nums[i] + 1 == nums[i + 1] || nums[i] == nums[i + 1] + 1
+            return nums[0...i] + nums[i + 2..-1]
+        end
+    end
+    nums
+end
+
+def consecutive_collapse(nums_t)
+    nums_t.each { nums_t = collapse(nums_t) }
+    nums_t
 end
 
 # p consecutive_collapse([3, 4, 1])                     # [1]
@@ -380,20 +526,39 @@ end
 # p consecutive_collapse([13, 11, 12, 12])              # []
 
 
-def pretentious_primes(array, n)
-    new_array = []
-    (2..(array.max * 2)).each do |i|
-        new_array << i if prime?(i)            
+# def pretentious_primes(array, n)
+#     new_array = []
+#     (2..(array.max * 2)).each do |i|
+#         new_array << i if prime?(i)            
+#     end
+#     array.map do |el|
+#         new_array.select { |n_el| n_el > el }[0]
+#     end 
+# end
+
+# def prime?(num)
+#     return false if num < 2
+#     (2...num).each { |i| return false if num % i == 0}
+#     true
+# end
+def next_prime(number, i)
+    step = 1
+    if i < 0
+        i = -i
+        step = -step
     end
-    array.map do |el|
-        new_array.select { |n_el| n_el > el }[0]
-    end 
+
+    prime_count = 0
+    while prime_count < i
+        return nil if number < 0
+        number += step
+        prime_count += 1 if prime?(number)
+    end
+    number
 end
 
-def prime?(num)
-    return false if num < 2
-    (2...num).each { |i| return false if num % i == 0}
-    true
+def pretentious_primes(nums, i)
+    nums.map { |num| next_prime(num, i) } 
 end
 
 p pretentious_primes([4, 15, 7], 1)           # [5, 17, 11]
