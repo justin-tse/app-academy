@@ -124,7 +124,11 @@ end
 
 def xnor_select(arr, prc_1, prc_2)
     arr.select { |el| prc_1.call(el) && prc_2.call(el) || !prc_1.call(el) && !prc_2.call(el) }
+end
 
+# Optimized the code
+def xnor_select(arr, prc_1, prc_2)
+    arr.select { |el| prc_1.call(el) == prc_2.call(el) }
 end
 
 # is_even = Proc.new { |n| n % 2 == 0 }
@@ -142,13 +146,13 @@ def filter_out!(arr, &prc)
     arr.select! { |el| !prc.call(el) }
 end 
 
-# arr_1 = [10, 6, 3, 2, 5 ]
-# p filter_out!(arr_1) { |x| x.odd? }
-# p arr_1     # [10, 6, 2]
+def filter_out!(array, &prc)
+    array.uniq.each { |el| array.delete(el) if prc.call(el) }
+end
 
-# arr_2 = [1, 7, 3, 5 ]
-# filter_out!(arr_2) { |x| x.odd? }
-# p arr_2     # []
+# arr_1 = [10, 6, 3, 2, 5 ]
+# filter_out!(arr_1) { |x| x.odd? }
+# p arr_1     # [10, 6, 2]
 
 # arr_3 = [10, 6, 3, 2, 5 ]
 # filter_out!(arr_3) { |x| x.even? }
@@ -182,6 +186,19 @@ def proctition(arr, &prc)
     arr.select { |el| prc.call(el) } + arr.select { |el| !prc.call(el) }
 end
 
+def proctition(arr, &prc)
+    trues = []
+    falses = []
+    arr.each do |el| 
+        if prc.call(el) 
+            trues << el
+        else
+            falses << el 
+        end
+    end
+    [*trues, *falses]
+end
+
 # p proctition([4, -5, 7, -10, -2, 1, 3]) { |el| el > 0 }
 # # [4, 7, 1, 3, -5, -10, -2]
 
@@ -202,6 +219,12 @@ def selected_map!(arr, prc_1, prc_2)
             el
         end
     end
+    nil
+end
+
+# Optimized the code
+def selected_map!(arr, prc_1, prc_2)
+    arr.each_with_index { |el, i| arr[i] = prc_2.call(el) if prc_1.call(el) }
     nil
 end
 
@@ -230,6 +253,11 @@ def chain_map(val, procs)
     result
 end
 
+# Optimized the code
+def chain_map(val, procs)
+    procs.inject(val) { |accum, proc| proc.call(accum) }
+end
+
 # add_5 = Proc.new { |n| n + 5 }
 # half = Proc.new { |n| n / 2.0 }
 # square = Proc.new { |n| n * n }
@@ -249,9 +277,23 @@ def proc_suffix(sent, hash)
     (0...words.length).map { |i| words[i] + suffix[i]}.join(" ")
 end 
 
-contains_a = Proc.new { |w| w.include?('a') }
-three_letters = Proc.new { |w| w.length == 3 }
-four_letters = Proc.new { |w| w.length == 4 }
+# Optimized the code 
+def proc_suffix(sent, suffixes)
+    words = sent.split
+    new_words = []
+    words.each do |word|
+        new_word = word
+        suffixes.each do |prc, suffix|
+            new_word += suffix if prc.call(word)
+        end
+        new_words << new_word
+    end
+    new_words.join(" ")
+end
+
+# contains_a = Proc.new { |w| w.include?('a') }
+# three_letters = Proc.new { |w| w.length == 3 }
+# four_letters = Proc.new { |w| w.length == 4 }
 
 # p proc_suffix('dog cat',
 #     contains_a => 'ly',
@@ -288,10 +330,24 @@ def proctition_platinum(arr, *procs)
     hash
 end
 
-is_yelled = Proc.new { |s| s[-1] == '!' }
-is_upcase = Proc.new { |s| s.upcase == s }
-contains_a = Proc.new { |s| s.downcase.include?('a') }
-begins_w = Proc.new { |s| s.downcase[0] == 'w' }
+def proctition_platinum(arr, *prcs)
+    partition = {}
+    prcs.each_index { |i| partition[i + 1] = [] }
+    arr.each do |el|
+        prcs.each_with_index do |prc, i|
+            if prc.call(el)
+                partition[i + 1] << el
+                break
+            end
+        end
+    end
+    partition
+end
+
+# is_yelled = Proc.new { |s| s[-1] == '!' }
+# is_upcase = Proc.new { |s| s.upcase == s }
+# contains_a = Proc.new { |s| s.downcase.include?('a') }
+# begins_w = Proc.new { |s| s.downcase[0] == 'w' }
 
 # p proctition_platinum(['WHO', 'what', 'when!', 'WHERE!', 'how', 'WHY'], is_yelled, contains_a)
 # # {1=>["when!", "WHERE!"], 2=>["what"]}
@@ -316,12 +372,25 @@ def procipher(sent, hash)
     new_words.join(" ")
 end
 
-is_yelled = Proc.new { |s| s[-1] == '!' }
-is_upcase = Proc.new { |s| s.upcase == s }
-contains_a = Proc.new { |s| s.downcase.include?('a') }
-make_question = Proc.new { |s| s + '???' }
-reverse = Proc.new { |s| s.reverse }
-add_smile = Proc.new { |s| s + ':)' }
+# Optimized the code
+def procipher(sentence, cipher)
+    words = sentence.split(' ')
+    new_words = words.map do |word|
+        new_word = word
+        cipher.each do |checker, changer|
+            new_word = changer.call(new_word) if checker.call(word)
+        end
+        new_word
+    end
+    new_words.join(' ')
+end
+
+# is_yelled = Proc.new { |s| s[-1] == '!' }
+# is_upcase = Proc.new { |s| s.upcase == s }
+# contains_a = Proc.new { |s| s.downcase.include?('a') }
+# make_question = Proc.new { |s| s + '???' }
+# reverse = Proc.new { |s| s.reverse }
+# add_smile = Proc.new { |s| s + ':)' }
 
 # p procipher('he said what!',
 #     is_yelled => make_question,
@@ -365,6 +434,23 @@ def picky_procipher(sent, hash)
     new_words.join(" ")
 end
 
+# Optimized the code
+def picky_procipher(sentence, cipher)
+    words = sentence.split(' ')
+    new_words = words.map do |word|
+        key_procs = cipher.keys
+        matches = key_procs.select { |prc| prc.call(word) }
+        if matches.length >= 1
+            key_proc = matches.first
+            value_proc = cipher[key_proc]
+            value_proc.call(word)
+        else
+            word
+        end
+    end
+    new_words.join(' ')
+end
+
 is_yelled = Proc.new { |s| s[-1] == '!' }
 is_upcase = Proc.new { |s| s.upcase == s }
 contains_a = Proc.new { |s| s.downcase.include?('a') }
@@ -372,29 +458,29 @@ make_question = Proc.new { |s| s + '???' }
 reverse = Proc.new { |s| s.reverse }
 add_smile = Proc.new { |s| s + ':)' }
 
-p picky_procipher('he said what!',
-    is_yelled => make_question,
-    contains_a => reverse
-) # "he dias what!???"
+# p picky_procipher('he said what!',
+#     is_yelled => make_question,
+#     contains_a => reverse
+# ) # "he dias what!???"
 
-p picky_procipher('he said what!',
-    contains_a => reverse,
-    is_yelled => make_question
-) # "he dias !tahw"
+# p picky_procipher('he said what!',
+#     contains_a => reverse,
+#     is_yelled => make_question
+# ) # "he dias !tahw"
 
-p picky_procipher('he said what!',
-    contains_a => reverse,
-    is_yelled => add_smile
-) # "he dias !tahw"
+# p picky_procipher('he said what!',
+#     contains_a => reverse,
+#     is_yelled => add_smile
+# ) # "he dias !tahw"
 
-p picky_procipher('stop that taxi now',
-    is_upcase => add_smile,
-    is_yelled => reverse,
-    contains_a => make_question
-) # "stop that??? taxi??? now"
+# p picky_procipher('stop that taxi now',
+#     is_upcase => add_smile,
+#     is_yelled => reverse,
+#     contains_a => make_question
+# ) # "stop that??? taxi??? now"
 
-p picky_procipher('STOP that taxi!',
-    is_upcase => add_smile,
-    is_yelled => reverse,
-    contains_a => make_question
-) # "STOP:) that??? !ixat"
+# p picky_procipher('STOP that taxi!',
+#     is_upcase => add_smile,
+#     is_yelled => reverse,
+#     contains_a => make_question
+# ) # "STOP:) that??? !ixat"
