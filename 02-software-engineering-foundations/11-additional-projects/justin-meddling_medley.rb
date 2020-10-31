@@ -72,6 +72,12 @@ def triplet_true(str)
     false
 end
 
+# Optimized the code
+def triplet_true(str)
+    (0...str.length).each { |i| return true if str[i..i + 2] == str[i] * 3 }
+    false
+end
+
 # p triplet_true('caaabb')        # true
 # p triplet_true('terrrrrible')   # true
 # p triplet_true('runninggg')     # true
@@ -114,6 +120,16 @@ def uncompress(str)
     new_str
 end
 
+# Second method
+def uncompress(str)
+    uncompressed = ''
+    (0...str.length - 1).each do |i|
+        letter = str[i]
+        num = str[i + 1].to_i
+        uncompressed += letter * num
+    end
+    uncompressed
+end
 # p uncompress('a2b4c1') # 'aabbbbc'
 # p uncompress('b1o2t1') # 'boot'
 # p uncompress('x3y1x2z4') # 'xxxyxxzzzz'
@@ -126,6 +142,17 @@ def conjunct_select(arr, *prcs)
         new_arr << el if prcs.all? { |prc| prc.call(el) }
     end
     new_arr
+end
+
+# Optimized the code
+def conjunct_select(arr, *prcs)
+    arr.select { |el| prcs.all? { |prc| prc.call(el) } }
+end
+
+# def compress_str
+
+def conjunct_select(array, *prcs)
+    prcs.inject(array) { |acc, prc| acc.select(&prc) }
 end
 
 # is_positive = Proc.new { |n| n > 0 }
@@ -166,12 +193,31 @@ def non_vowel_begin(word)
     word
 end
 
+# Optimized the code
+def convert_pig_latin(sentence)
+    words = sentence.split
+    new_words = words.map do |word|
+        new_word = word.length > 2 ? convert_the_word(word) : word
+        word == word.capitalize ? new_word.capitalize : new_word
+    end
+    new_words.join(" ")
+end
+
+def convert_the_word(word) 
+    vowels = "aeiou"
+    return word + "yay" if vowels.include?(word[0])
+    word.each_char.with_index do |char, i|
+        if vowels.include?(char)
+            return word[i..-1] + word[0...i] + "ay"
+        end              
+    end
+end
+
 # p convert_pig_latin('We like to eat bananas') # "We ikelay to eatyay ananasbay"
 # p convert_pig_latin('I cannot find the trash') # "I annotcay indfay ethay ashtray"
 # p convert_pig_latin('What an interesting problem') # "Atwhay an interestingyay oblempray"
 # p convert_pig_latin('Her family flew to France') # "Erhay amilyfay ewflay to Ancefray"
 # p convert_pig_latin('Our family flew to France') # "Ouryay amilyfay ewflay to Ancefray"
-
 
 def reverberate(sentence)
     vowels = "aeiou"
@@ -210,6 +256,37 @@ def non_vowel_begin(word)
     new_word
 end
 
+# Optimized the code 
+def reverberate(sentence)
+    words = sentence.split
+    new_words = words.map do |word|
+        new_word = word.length > 2 ? translate_word(word) : word
+        new_word = word == word.capitalize ? new_word.capitalize : new_word
+    end
+    new_words.join(" ")
+end
+
+def translate_word(word)
+    vowels = "AEIOUaeiou"
+    return word * 2 if vowels.include?(word[-1])
+    new_word = word
+    word.each_char.with_index { |char, i| new_word = word + word[i..-1] if vowels.include?(char)}
+    new_word
+end
+
+# We can also use while to control the order from the end to the begin
+def translate_word(word)
+    vowels = 'AEIOUaeiou'
+    return word + word if vowels.include?(word[-1])
+    i = word.length - 1
+    while i >= 0
+        if vowels.include?(word[i])
+            return word + word[i..-1]
+        end
+        i -= 1
+    end
+end
+
 # p reverberate('We like to go running fast') # "We likelike to go runninging fastast"
 # p reverberate('He cannot find the trash') # "He cannotot findind thethe trashash"
 # p reverberate('Pasta is my favorite dish') # "Pastapasta is my favoritefavorite dishish"
@@ -219,6 +296,11 @@ def disjunct_select(arr, *prcs)
     arr.select do |el|
         prcs.any? { |prc| prc.call(el) }
     end
+end
+
+# Optimized the code
+def disjunct_select(arr, *prcs)
+    arr.select { |el| prcs.any? { |prc| prc.call(el) } }
 end
 
 # longer_four = Proc.new { |s| s.length > 4 }
@@ -267,6 +349,26 @@ def vowel_change(word, i)
     # word.delete("a")
 end
 
+# Optimized the code
+def  alternating(sentence)
+    words = sentence.split 
+    new_words = words.map.with_index do |word, i|
+        i.even? ? remove_first_vowel(word) : remove_first_vowel(word)
+    end
+    new_words.join(" ")
+
+end
+
+def remove_first_vowel(word)
+    vowels = "AEIOUaeiou"
+    word.each_char.with_index { |char| return word[0...i] + word[i + 1.. -1] if vowels.include?(char) } 
+    word
+end
+
+def remove_last_vowel(word)
+    remove_first_vowel(word.reverse).reverse
+end
+
 # p alternating_vowel('panthers are great animals') # "pnthers ar grat animls"
 # p alternating_vowel('running panthers are epic') # "rnning panthrs re epc"
 # p alternating_vowel('code properly please') # "cde proprly plase"
@@ -295,7 +397,6 @@ def non_vowel_begin(word)
     new_word = ""
     word.each_char.with_index do |char, i|
         if vowels.include?(char.downcase)
-            indices << i
             new_word += char + "b" + char
         else
             new_word += char
@@ -303,6 +404,30 @@ def non_vowel_begin(word)
     end
     new_word
 end
+
+
+# Optimized the code
+def silly_talk(sentence)
+    words = sentence.split
+    new_words = words.map do |word|
+        word == word.capitalize ? transcribe_word(word).capitalize : transcribe_word(word)
+    end
+    new_words.join(" ")
+end
+
+def transcribe_word(word)
+    vowels = "AEIOUaeiou"
+    new_word = ""
+    return word + word[-1] if vowels.include?(word[-1])
+    word.each_char do |char|
+        if vowels.include?(char)
+            new_word += char + "b" + char
+        else
+            new_word += char
+        end
+    end
+    new_word
+end 
 
 # p silly_talk('Kids like cats and dogs') # "Kibids likee cabats aband dobogs"
 # p silly_talk('Stop that scooter') # "Stobop thabat scobooboteber"
@@ -321,6 +446,24 @@ def compress(str)
             compress_str += char + count.to_s
             count = 1
         end
+    end
+    compress_str
+end
+
+# Optimized the code
+def compress(str)
+    compress_str = ""
+    i = 0
+    while i < str.length
+        char = str[i]
+        count = 1
+        i += 1
+        while char == str[i]
+            count += 1
+            i += 1
+        end
+        
+        compress_str += count == 1 ?  char : (char + count.to_s)
     end
     compress_str
 end
