@@ -1,8 +1,8 @@
 class HumanPlayer
-    attr_reader :player_mark
+    attr_reader :mark
 
-    def initialize(player_mark)
-        @player_mark = player_mark
+    def initialize(mark)
+        @mark = mark
     end
 
     def get_position
@@ -11,11 +11,8 @@ class HumanPlayer
         count_space = 0
         count_char = 0
         position = position.split(" ")
-        puts position
-        p position[0]
-        return puts "Only and need one space!!!" if position.length != 2
-        return puts "You need input integer!!!" if !(position[0].is_a?(Integer) && position[1].is_a?(Integer))
-        [position[0], position[1]]
-        p position
+        raise puts "Only and need one space!!!" if position.length != 2
+        raise puts "You need input integer!!!" if !(("0".."10000").to_a.include?(position[0]) && ("0".."10000").to_a.include?(position[1]))
+        [position[0].to_i, position[1].to_i]
     end
 end
