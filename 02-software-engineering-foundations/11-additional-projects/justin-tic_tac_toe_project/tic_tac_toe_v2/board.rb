@@ -1,12 +1,13 @@
 class Board
     attr_reader :grid
 
-    def initialize
-        @grid = Array.new(3) { Array.new(3, "_")}
+    def initialize(n)
+        @n = n
+        @grid = Array.new(@n) { Array.new(@n, "_")}
     end
 
     def valid?(position)
-        position[0] >= 0 && position[0] <= 2 && position[1] >= 0 && position[1] <= 2
+        position[0] >= 0 && position[0] <= @n - 1 && position[1] >= 0 && position[1] <= @n - 1
     end
 
     def empty?(position)
