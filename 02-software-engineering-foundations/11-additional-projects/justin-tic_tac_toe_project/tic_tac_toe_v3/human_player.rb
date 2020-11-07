@@ -5,14 +5,14 @@ class HumanPlayer
         @mark = mark
     end
 
-    def get_position
-        puts "Please input the position, the format is row col like: 1 2"
-        position = gets.chomp()
-        count_space = 0
-        count_char = 0
-        position = position.split(" ")
-        raise puts "Only and need one space!!!" if position.length != 2
-        raise puts "You need input integer!!!" if !(("0".."10000").to_a.include?(position[0]) && ("0".."10000").to_a.include?(position[1]))
-        [position[0].to_i, position[1].to_i]
+    def get_position(legal_positions)
+        position = []
+        until legal_positions.include?(position)
+            puts "Player #{@mark} please input the legal position!"
+            position = gets.chomp()
+            position = position.split(" ")
+            position = [position[0].to_i, position[1].to_i]
+        end
+        position
     end
 end
