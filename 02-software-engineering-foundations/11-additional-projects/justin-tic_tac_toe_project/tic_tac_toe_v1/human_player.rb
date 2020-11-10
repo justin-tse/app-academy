@@ -15,4 +15,12 @@ class HumanPlayer
         raise puts "You need input integer!!!" if !(("0".."10000").to_a.include?(position[0]) && ("0".."10000").to_a.include?(position[1]))
         [position[0].to_i, position[1].to_i]
     end
+
+    # Optimized the code
+    def get_position
+        puts "Player #{mark.to_s}, enter two numbers representing a position in the format 'row col'"
+        pos = gets.chomp.split(' ').map(&:to_i)
+        raise "sorry, that was invalid :(" if pos.length != 2
+        pos
+    end
 end

@@ -1,28 +1,49 @@
 class Board
-    attr_reader :grid
-
     def initialize
         @grid = Array.new(3) { Array.new(3, "_")}
     end
 
-    def valid?(position)
-        position[0] >= 0 && position[0] <= 2 && position[1] >= 0 && position[1] <= 2
+    def [](pos)
+        row, col = pos
+        @grid[row][col]
     end
 
+    def []=(pos, val)
+        row, col = pos
+        @grid[row][col] = val
+    end
+    
+    def valid?(position)
+        position[0] >= 0 && position[0] <= @n - 1 && position[1] >= 0 && position[1] <= @n - 1
+    end
+
+    # Optimized the code
+    def valid?(pos)
+        row, col = pos
+        pos.all? do |i|
+            0 <= i && i < @grid.length
+        end
+    end
+    
     def empty?(position)
         @grid[position[0]][position[1]] == '_'
     end
+    
+    # Optimized the code
+    def empty?(pos)
+        self[pos] == '_'
+    end
 
-    def place_mark(position, mark)
-        if valid?(position) && empty?(position)
-            @grid[position[0]][position[1]] = mark
+    def place_mark(pos, mark)
+        if valid?(pos) && empty?(pos)
+            self[pos] = mark
         else
-            raise "the position have problem"
+            raise "invalid mark"
         end
     end
 
     def print
-        @grid.each { |row| p row }
+        @grid.each { |row| p row.join(' ') }
     end
 
     def win_row?(mark)
@@ -32,8 +53,8 @@ class Board
     end
 
     def win_col?(mark)
-        @grid.transpose.any? do |row|
-            row.all? { |el| el == mark }
+        @grid.transpose.any? do |col|
+            col.all? { |el| el == mark }
         end
     end
 

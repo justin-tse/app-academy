@@ -18,19 +18,20 @@ class Game
     end
 
     def play
-            while @board.empty_positions?
-                @board.print                
-                position = @current_player.get_position
-                @board.place_mark(position, @current_player.mark)
-                if @board.win?(@current_player.mark)
-                    @board.print
-                    return puts "victory: #{@current_player.mark}"
-                else
-                    self.switch_turn
-                end
+        while @board.empty_positions?
+            @board.print                
+            pos = @current_player.get_position
+            @board.place_mark(pos, @current_player.mark)
+            if @board.win?(@current_player.mark)
+                @board.print
+                puts "Game Over"
+                return puts "victory: #{@current_player.mark}"
+            else
+                self.switch_turn
             end
-            puts "draw"
+        end
+        
+        puts "Game Over"
+        puts "draw"
     end
 end
-
-Game.new(:x, :o).play
