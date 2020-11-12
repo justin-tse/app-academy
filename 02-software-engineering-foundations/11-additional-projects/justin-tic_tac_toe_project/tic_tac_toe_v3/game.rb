@@ -6,13 +6,8 @@ require_relative "computer_player"
 class Game
     def initialize(n, hash) 
         @board = Board.new(n)
-        @players = []
-        hash.each do |mark, human_or_not| 
-            if human_or_not
-                @players << HumanPlayer.new(mark)
-            else
-                @players << ComputerPlayer.new(mark)
-            end
+        @players = hash.map do |mark, is_human| 
+            is_human ? HumanPlayer.new(mark) : ComputerPlayer.new(mark)
         end
         @current_player = @players.first
     end
@@ -29,11 +24,13 @@ class Game
             @board.place_mark(position, @current_player.mark)
             if @board.win?(@current_player.mark)
                 @board.print
+                puts 'Game Over'
                 return puts "victory: #{@current_player.mark}"
             else
                 self.switch_turn
             end
         end
+        puts 'Game Over'
         puts "draw"
     end
 end

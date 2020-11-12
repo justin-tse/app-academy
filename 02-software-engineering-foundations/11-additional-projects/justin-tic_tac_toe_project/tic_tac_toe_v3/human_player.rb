@@ -6,13 +6,13 @@ class HumanPlayer
     end
 
     def get_position(legal_positions)
-        position = []
-        until legal_positions.include?(position)
+        pos = []
+        until legal_positions.include?(pos)
             puts "Player #{@mark} please input the legal position!"
-            position = gets.chomp()
-            position = position.split(" ")
-            position = [position[0].to_i, position[1].to_i]
+            pos = gets.chomp().split(' ').map(&:to_i)
+            puts "#{pos} is not a legal position" if !legal_positions.include?(pos)
+            raise 'sorry, that was invalid :(' if pos.length != 2
         end
-        position
+        pos
     end
 end
