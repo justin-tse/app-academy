@@ -20,7 +20,7 @@ class Item
         return false if !(1 <= m && m <= 12)
         return false if !(1 <= d && d <= 31)
         true
-    end
+    end        
 end
 
 p Item.new('Fix login page', '2019-10-22', 'It loads slow.').valid_date?('2019-10-25') # true
