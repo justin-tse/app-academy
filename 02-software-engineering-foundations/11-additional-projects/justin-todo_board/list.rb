@@ -65,10 +65,10 @@ class List
         puts "------------------------------------------"
     end
 
-    def print_print_priority
+    def print_priority
         puts "------------------------------------------"
-        puts "#{@items.first.title.ljust(31, ' ')} #{@items.first.deadline}"
-        puts "#{@items.first.description.ljust(42, ' ')}"
+        puts "#{self.priority.title.ljust(31, ' ')} #{self.priority.deadline}"
+        puts "#{self.priority.description.ljust(42, ' ')}"
         puts "------------------------------------------"
     end
 
