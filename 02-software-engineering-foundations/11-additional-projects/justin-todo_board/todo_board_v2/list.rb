@@ -47,29 +47,27 @@ class List
     end
 
     def print
-        puts "------------------------------------------"
-        puts @lable.upcase.center(42, ' ')
-        puts "------------------------------------------"
-        puts "Index | Item                 | Deadline".ljust(42, ' ')
-        puts "------------------------------------------"
+        puts "-------------------------------------------------"
+        puts @lable.upcase.center(49, ' ')
+        puts "-------------------------------------------------"
+        puts "Index | Item                 | Deadline   | Done".ljust(49, ' ')
+        puts "-------------------------------------------------"
         @items.each_with_index do |item, idx|
-            puts "#{idx.to_s.ljust(5, ' ')} | #{item.title.ljust(20, ' ')} | #{item.deadline.ljust(11, ' ')}"
+            puts "#{idx.to_s.ljust(5, ' ')} | #{item.title.ljust(20, ' ')} | #{item.deadline.ljust(11, ' ')} | #{item.is_done.ljust(5, ' ')}"
         end
-        puts "------------------------------------------"
+        puts "-------------------------------------------------"
     end
 
     def print_full_item(index)
-        puts "------------------------------------------"
-        puts "#{@items[index].title.ljust(31, ' ')} #{@items[index].deadline}"
-        puts "#{@items[index].description.ljust(42, ' ')}"
-        puts "------------------------------------------"
+        puts "-------------------------------------------------"
+        puts "#{@items[index].title.ljust(31, ' ')} #{@items[index].deadline.ljust(12, ' ')} #{@items[index].is_done.rjust(4, ' ')}"
+        puts "-------------------------------------------------"
     end
 
     def print_priority
-        puts "------------------------------------------"
-        puts "#{self.priority.title.ljust(31, ' ')} #{self.priority.deadline}"
-        puts "#{self.priority.description.ljust(42, ' ')}"
-        puts "------------------------------------------"
+        puts "-------------------------------------------------"
+        puts "#{self.priority.title.ljust(31, ' ')} #{self.priority.deadline.ljust(12, ' ')} #{self.priority.is_done.rjust(4, ' ')}"
+        puts "-------------------------------------------------"
     end
 
     def up(index, amount=1)
@@ -94,5 +92,20 @@ class List
 
     def sort_by_date!
         @items.sort_by! { |item| item.deadline }
+    end
+
+    def toggle_item(index)
+        @items[index].toggle
+    end
+
+
+    def remove_item(index)
+        return false if !self.valid_index?(index)
+        @items.delete(@items[index])
+        true
+    end
+
+    def purge
+        @items.select! { |item| item.is_done == '[ ]' }
     end
 end

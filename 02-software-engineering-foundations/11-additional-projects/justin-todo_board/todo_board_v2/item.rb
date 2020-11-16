@@ -1,10 +1,12 @@
 class Item
-    attr_accessor :title, :deadline, :description
+    attr_accessor :title, :deadline, :description, :is_done
+    # attr_writer :is_done
 
     def initialize(title, deadline, description)
         @title = title
         @deadline = deadline
         @description = description
+        @is_done = '[ ]'
     end
 
     def deadline=(date)
@@ -18,7 +20,15 @@ class Item
         return false if !(1 <= m && m <= 12)
         return false if !(1 <= d && d <= 31)
         true
-    end        
+    end
+    
+    def toggle
+        if @is_done == '[ ]'
+            @is_done = '[✓]'
+        else
+            @is_done = '[ ]'
+        end
+    end
 end
 
 # p Item.new('Fix login page', '2019-10-22', 'It loads slow.').valid_date?('2019-10-25') # true
