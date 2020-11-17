@@ -53,6 +53,13 @@ class TodoBoard
             self.get_command
         end
     end
+
+    #Optimized 
+    def run
+        while true
+            return if !self.get_command
+        end
+    end
 end
 
 TodoBoard.new.run

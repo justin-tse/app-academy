@@ -2,6 +2,14 @@ require_relative "item.rb"
 class List
     attr_accessor :label
 
+    # Optimized the code ==> Use Parameter to defined the number is better (print)
+    # print styles
+    LINE_WIDTH = 49
+    INDEX_COL_WIDTH = 5
+    ITEM_COL_WIDTH = 20
+    DEADLINE_COL_WIDTH = 10
+    CHECKMARK = "\u2713".force_encoding('utf-8') # pretty checkmark '✓' == "\u2713"
+
     def initialize(label)
         @lable = label
         @items = []
@@ -9,7 +17,7 @@ class List
 
     def add_item(title, deadline, description=nil)
         item = Item.new(title, deadline, description)
-        if item.valid_date?(deadline)
+        if Item.valid_date?(deadline)
             @items << item
             true
         else
@@ -47,27 +55,30 @@ class List
     end
 
     def print
-        puts "-------------------------------------------------"
-        puts @lable.upcase.center(49, ' ')
-        puts "-------------------------------------------------"
-        puts "Index | Item                 | Deadline   | Done".ljust(49, ' ')
-        puts "-------------------------------------------------"
+        puts "-" * LINE_WIDTH
+        puts @lable.upcase.center(LINE_WIDTH, ' ')
+        puts "-" * LINE_WIDTH
+        puts "#{'Index'.ljust(INDEX_COL_WIDTH)} | #{'Item'.ljust(ITEM_COL_WIDTH)} | #{'Deadline'.ljust(DEADLINE_COL_WIDTH)} | Done"
+        puts "-" * LINE_WIDTH
         @items.each_with_index do |item, idx|
-            puts "#{idx.to_s.ljust(5, ' ')} | #{item.title.ljust(20, ' ')} | #{item.deadline.ljust(11, ' ')} | #{item.is_done.ljust(5, ' ')}"
+            status = item.is_done ? CHECKMARK : ' '
+            puts "#{idx.to_s.ljust(INDEX_COL_WIDTH)} | #{item.title.ljust(ITEM_COL_WIDTH)} | #{item.deadline.ljust(DEADLINE_COL_WIDTH)} | [#{status}]"
         end
-        puts "-------------------------------------------------"
+        puts "-" * LINE_WIDTH
     end
 
     def print_full_item(index)
-        puts "-------------------------------------------------"
-        puts "#{@items[index].title.ljust(31, ' ')} #{@items[index].deadline.ljust(12, ' ')} #{@items[index].is_done.rjust(4, ' ')}"
-        puts "-------------------------------------------------"
+        item = self[index]
+        return if item.nil?
+        status = item.is_done ? CHECKMARK : ' '
+        puts "-" * LINE_WIDTH
+        puts "#{item.title}".ljust(LINE_WIDTH/2) + "#{item.deadline} [#{status}]".rjust(LINE_WIDTH/2)
+        puts item.description
+        puts "-" * LINE_WIDTH
     end
 
     def print_priority
-        puts "-------------------------------------------------"
-        puts "#{self.priority.title.ljust(31, ' ')} #{self.priority.deadline.ljust(12, ' ')} #{self.priority.is_done.rjust(4, ' ')}"
-        puts "-------------------------------------------------"
+        print_full_item(0)
     end
 
     def up(index, amount=1)
@@ -98,14 +109,15 @@ class List
         @items[index].toggle
     end
 
-
+    # Optimized the code
     def remove_item(index)
         return false if !self.valid_index?(index)
-        @items.delete(@items[index])
+        @items.delete_at(index)
         true
     end
 
+    # Optimized the code ==> is_done is defined true or false
     def purge
-        @items.select! { |item| item.is_done == '[ ]' }
+        @items.delete_if(&:is_done) 
     end
 end
