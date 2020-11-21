@@ -12,6 +12,14 @@ class Array
         self
     end
 
+    Optimized the code
+    def my_each(&prc)
+        self.length.times do |i|
+            prc.call(self[i])
+        end
+        self
+    end
+
 # My Select
     def my_select(&prc)
         selcted = []
@@ -45,24 +53,41 @@ class Array
         self.my_each do |sub|
             debugger
             if sub.is_a?(Integer) 
-                return sub
+                flattened << sub
             else
-                return flattened << sub.my_flatten   
+                flattened.concat(sub.my_flatten)
             end
         end
         flattened
     end
 # My Zip
     def my_zip(*args)
-        ziped = Array.new(self.length) { Array.new([]) }
-        (0...self.length).each { |i| ziped[i] << self[i] }
+        zipped = Array.new(self.length) { Array.new([]) }
+        (0...self.length).each { |i| zipped[i] << self[i] }
         debugger
-        ziped.each.with_index do |arr, i|
+        zipped.each.with_index do |arr, i|··
             args.each.with_index do |arg, j|
                 arr << arg[i]
             end
             # (0...self.length).each { |j| arr << args[j][i] }
         end
+    end
+
+    # Optimized the code
+    def my_zip(*arrays)
+        zipped = []
+
+        self.length.times do |i|
+            subzip = [self[i]]
+
+            arrays.my_each do |array|
+                subzip << array[i]
+            end
+
+            zipped << subzip
+        end
+
+        zipped
     end
 # My Rotate
     def my_rotate(n=1)
@@ -80,6 +105,13 @@ class Array
         end
         self
     end
+
+    # Optimized the code
+    def my_rotate(n=1)
+        split_idx = n % self.length
+        self.drop(split_idx) + self.take(split_idx)        
+    end
+
 
 # a = [ "a", "b", "c", "d" ]
 # p a.my_rotate         #=> ["b", "c", "d", "a"]
@@ -110,6 +142,18 @@ class Array
         reversed
     end
 
+    # Optimized the code
+    def my_reverse
+        reversed = []
+
+        self.my_each do |el|
+            reversed.unshift(el)
+        end
+
+        reversed
+    end
+
 end
 # p [ "a", "b", "c" ].my_reverse   #=> ["c", "b", "a"]
 # p [ 1 ].my_reverse               #=> [1]
+p [1, 2, 3, 4, 5].my_all? { |i| i.even? }
