@@ -12,7 +12,7 @@ class Array
         self
     end
 
-    Optimized the code
+ # Optimized the code
     def my_each(&prc)
         self.length.times do |i|
             prc.call(self[i])
