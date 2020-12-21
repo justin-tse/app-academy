@@ -11,4 +11,23 @@ class Player
     puts "You must be able to form a word starting with the new fragment.\n"
   end
 
+  def guess(fragment)
+    prompt(fragment)
+    gets.chomp.downcase
+  end
+
+  def inspect
+    "HumanPlayer: #{name}"
+  end
+
+  def to_s
+    name
+  end
+
+  private
+
+  def prompt(fragment)
+    puts "The current fragment is '#{fragment}"
+    print "Add a letter: "
+  end
 end
