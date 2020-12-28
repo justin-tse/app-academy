@@ -8,6 +8,7 @@
 def sum_to(n)
   return nil if n <= 0
   return 1 if n == 1
+
   n + sum_to(n - 1)
 end
 
@@ -18,9 +19,9 @@ end
 # p sum_to(-8)  # => returns nil
 
 def add_numbers(nums_arr)
-  return nil if nums_arr.empty?
-  return nums_arr.first if nums_arr.length == 1
-  nums_arr.first + add_numbers(nums_arr[1..-1])
+  return nums_arr.first if nums_arr.length <= 1
+
+  nums_arr.pop + add_numbers(nums_arr)
 end
 
 # Test Cases
@@ -32,6 +33,7 @@ end
 def gamma_fnc(n)
   return nil if n <= 0
   return n if n == 1
+  
   (n - 1) * gamma_fnc(n - 1)
 end
 
@@ -43,11 +45,9 @@ end
 
 def ice_cream_shop(flavors, favorite)
   return false if flavors.empty?
-  if flavors.first == favorite
-    return true
-  else
-    ice_cream_shop(flavors[1..-1], favorite)
-  end
+  return true if flavors.first == favorite
+
+  ice_cream_shop(flavors[1..-1], favorite)
 end
 
 # Test Cases
@@ -58,15 +58,16 @@ end
 # p ice_cream_shop([], 'honey lavender')  # => returns false
 
 def reverse(string)
-  return string if string.length <= 1
+  return "" if string.empty?
+
   string[-1] + reverse(string[0..-2])
   # reverse(string[1..-1]) + string[0]
 end
 
 # Test Cases
-p reverse("house") # => "esuoh"
-p reverse("dog") # => "god"
-p reverse("atom") # => "mota"
-p reverse("q") # => "q"
-p reverse("id") # => "di"
-p reverse("") # => ""
+# p reverse("house") # => "esuoh"
+# p reverse("dog") # => "god"
+# p reverse("atom") # => "mota"
+# p reverse("q") # => "q"
+# p reverse("id") # => "di"
+# p reverse("") # => ""
